@@ -1,0 +1,122 @@
+networks:
+  honeypot-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
+
+volumes:
+  grafana-storage:
+  uptime-kuma-data:
+
+services:
+  # ─────────────────────────────────────────
+  # COWRIE — SSH/Telnet Honeypot
+  # ─────────────────────────────────────────
+  cowrie:
+    image: cowrie/cowrie:latest
+    container_name: cowrie
+    restart: unless-stopped
+    ports:
+      - "2222:2222" # SSH
+      - "2223:2223" # Telnet
+    volumes:
+      - ./logs/cowrie:/cowrie/cowrie-git/var/log/cowrie
+      - ./cowrie/cowrie.cfg:/cowrie/cowrie-git/etc/cowrie.cfg:ro
+      - ./cowrie/userdb.txt:/cowrie/cowrie-git/etc/userdb.txt:ro
+    environment:
+      - COWRIE_TELNET_ENABLED=yes
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.10
+
+  # ─────────────────────────────────────────
+  # OPENCANARY — Multi-service Honeypot
+  # ─────────────────────────────────────────
+  opencanary:
+    image: thinkst/opencanary:latest
+    container_name: opencanary
+    restart: unless-stopped
+    ports:
+      - "21:21" # FTP
+      - "80:80" # HTTP
+      - "3306:3306" # MySQL
+      - "5900:5900" # VNC
+      - "8082:8080" # HTTP alt
+    volumes:
+      - ./logs/opencanary:/var/log/opencanary
+      - ./opencanary/opencanary.conf:/etc/opencanaryd/opencanary.conf:ro
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.11
+    cap_add:
+      - NET_BIND_SERVICE
+
+  # ─────────────────────────────────────────
+  # LOKI — SIEM & Log Aggregation
+  # ─────────────────────────────────────────
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.20
+
+  # ─────────────────────────────────────────
+  # PROMTAIL — Wysyłanie logów
+  # ─────────────────────────────────────────
+  promtail:
+    image: grafana/promtail:3.0.0
+    container_name: promtail
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./logs/cowrie:/var/log/cowrie:ro
+      - ./logs/opencanary:/var/log/opencanary:ro
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.21
+
+  # ─────────────────────────────────────────
+  # GRAFANA — Wizualizacja Ataków
+  # ─────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+    depends_on:
+      - loki
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.22
+
+  # ─────────────────────────────────────────
+  # UPTIME KUMA — NMS
+  # ─────────────────────────────────────────
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    networks:
+      honeypot-net:
+        ipv4_address: 172.22.0.30
