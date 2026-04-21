@@ -1,0 +1,26 @@
+# Cowrie userdb.txt
+# Format: username:UID:password
+# * oznacza dowolne hasło
+# ! na początku hasła = odrzuć logowanie
+
+# Popularne kombinacje które atakujący próbują
+root:0:root
+root:0:123456
+root:0:password
+root:0:admin
+root:0:raspberry
+root:0:toor
+root:0:1234
+root:0:12345
+root:0:123456789
+root:0:test
+admin:0:admin
+admin:0:password
+admin:0:123456
+admin:0:admin123
+pi:1000:raspberry
+pi:1000:pi
+pi:1000:123456
+ubuntu:1000:ubuntu
+user:1000:user
+guest:1000:guest

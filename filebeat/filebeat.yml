@@ -1,0 +1,42 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /cowrie-logs/cowrie.json
+    json.keys_under_root: true
+    json.add_error_key: true
+    tags: ["cowrie", "honeypot"]
+    fields:
+      honeypot_type: cowrie
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /opencanary-logs/opencanary.log
+    json.keys_under_root: true
+    json.add_error_key: true
+    tags: ["opencanary", "honeypot"]
+    fields:
+      honeypot_type: opencanary
+    fields_under_root: true
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "honeypot-%{+yyyy.MM.dd}"
+
+setup.template.name: "honeypot"
+setup.template.pattern: "honeypot-*"
+setup.kibana:
+  host: "kibana:5601"
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7

@@ -1,0 +1,11 @@
+Raspberry Pi - dane logowania:
+	- hostname (main): pi-user
+
+	- username: pi-user
+	- password: zaq@WSX
+
+
+Użytkownik na Raspberry Pi :
+
+sudo adduser --disabled-password cowrie
+sudo su - cowrie
