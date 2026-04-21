@@ -77,12 +77,12 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "count_over_time({job=\"cowrie\"} [5m])",
+          "expr": "sum(count_over_time({job=\"cowrie\"} [$__range]))",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Total Events (5m)",
+      "title": "Total Events (Selected Range)",
       "type": "stat"
     },
     {
@@ -166,7 +166,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "sum by (eventid) (count_over_time({job=\"cowrie\"} | json [1m]))",
+          "expr": "sum by (eventid) (count_over_time({job=\"cowrie\"} | json [$__auto]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -233,7 +233,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "sum by (password) (count_over_time({job=\"cowrie\"} | json | password != \"\" [1h]))",
+          "expr": "sum by (password) (count_over_time({job=\"cowrie\"} | json | password != \"\" [$__range]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -270,7 +270,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "{job=\"cowrie\"} | json | eventid=\"cowrie.login.failed\" or eventid=\"cowrie.command.input\"",
+          "expr": "{job=\"cowrie\"} | json | eventid=~\"cowrie.login.failed|cowrie.command.input\"",
           "queryType": "range",
           "refId": "A"
         }
