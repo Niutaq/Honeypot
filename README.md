@@ -20,13 +20,13 @@ Lekki system honeypot zoptymalizowany pod kątem **Raspberry Pi**, służący do
 
 ## Szybki Start
 
-### 1. Włączenie systemu
+#### Włączenie systemu
 W głównym katalogu projektu należy wykonać:
 ```bash
 docker compose up -d
 ```
 
-### 2. Dostęp do paneli WWW
+#### Dostęp do paneli WWW
 | Narzędzie | URL | Dane logowania | Rola w projekcie |
 | :--- | :--- | :--- | :--- |
 | **Grafana** | `http://localhost:3000` lub `http://pi-user.local:3000/dashboards` | `admin` / `admin` | SIEM — wizualizacja ataków |
@@ -83,7 +83,7 @@ Symulacja prób dostępu do usług FTP lub MySQL:
 
 ---
 
-## Struktura Projektu
+#### Struktura Projektu
 - `docker-compose.yml` — definicja kontenerów (Cowrie, Canary, Loki, Grafana, Kuma).
 - `logs/` — katalog przechowywania logów przetwarzanych przez Promtail.
 - `grafana/dashboards/` — konfiguracja panelu SIEM.
