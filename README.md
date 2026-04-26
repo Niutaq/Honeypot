@@ -29,8 +29,8 @@ docker compose up -d
 ### 2. Dostęp do paneli WWW
 | Narzędzie | URL | Dane logowania | Rola w projekcie |
 | :--- | :--- | :--- | :--- |
-| **Grafana** | `http://localhost:3000 | http://pi-user.local:3000/dashboards` | `admin` / `admin` | SIEM — wizualizacja ataków |
-| **Uptime Kuma** | `http://localhost:3001 | http://pi-user.local:3001 | NMS — monitoring usług |
+| **Grafana** | `http://localhost:3000` | `http://pi-user.local:3000/dashboards` | `admin` / `admin` | SIEM — wizualizacja ataków |
+| **Uptime Kuma** | `http://localhost:3001` | `http://pi-user.local:3001` | NMS — monitoring usług |
 
 ---
 
