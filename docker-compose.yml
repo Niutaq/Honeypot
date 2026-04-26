@@ -21,9 +21,9 @@ services:
       - "2222:2222" # SSH
       - "2223:2223" # Telnet
     volumes:
-      - ./logs/cowrie:/cowrie/var/log/cowrie
-      - ./cowrie/cowrie.cfg:/cowrie/etc/cowrie.cfg:ro
-      - ./cowrie/userdb.txt:/cowrie/etc/userdb.txt:ro
+      - ./logs/cowrie:/cowrie/cowrie-git/var/log/cowrie
+      - ./cowrie/cowrie.cfg:/cowrie/cowrie-git/etc/cowrie.cfg:ro
+      - ./cowrie/userdb.txt:/cowrie/cowrie-git/etc/userdb.txt:ro
     environment:
       - COWRIE_TELNET_ENABLED=yes
     networks:
