@@ -6,14 +6,14 @@ Lekki system honeypot zoptymalizowany pod kątem **Raspberry Pi**, służący do
 
 ## Co potrafi ten system?
 
-- **Honeypoty IoT:** Symuluje usługi SSH/Telnet (**Cowrie**) oraz FTP, HTTP, MySQL, VNC (**OpenCanary**).
+- **Honeypoty IoT:** Symulacja usług SSH/Telnet (**Cowrie**) oraz FTP, HTTP, MySQL, VNC (**OpenCanary**).
 - **SIEM / Log Aggregation:** Centralny system zbierania logów oparty na **Grafana Loki** i **Promtail**.
 - **NMS / Alerting:** Monitoring dostępności usług w czasie rzeczywistym przez **Uptime Kuma**.
 - **Wizualizacja (Dashboard):** Dedykowany panel w Grafanie prezentujący:
     - **Liczba włamań (Success logins)** oraz prób Brute-force.
     - **Top 10 IP Atakujących** (ranking najbardziej aktywnych hostów).
     - **Analiza haseł** (najczęściej używane słowa ze słowników).
-    - **Przechwycone komendy** (wszystko, co haker wpisał po zalogowaniu).
+    - **Przechwycone komendy** (historia poleceń wpisanych po zalogowaniu).
     - **Aktywność SSH vs IoT** (wykres aktywności poszczególnych usług).
 
 ---
@@ -21,16 +21,18 @@ Lekki system honeypot zoptymalizowany pod kątem **Raspberry Pi**, służący do
 ## Szybki Start
 
 ### 1. Włączenie systemu
-W głównym katalogu projektu wykonaj:
+W głównym katalogu projektu należy wykonać:
 ```bash
 docker compose up -d
 ```
 
 ### 2. Dostęp do paneli WWW
-| Narzędzie | URL | Dane logowania
-| :--- | :--- | :--- |
-| **Grafana** | `http://localhost:3000` (lokalnie) lub `http://pi-user.local:3000/dashboards` (RPi) | `admin` / `admin` | SIEM — wizualizacja ataków |
-| **Uptime Kuma** | `http://localhost:3001` (lokalnie) lub `http://pi-user.local:3001` (RPi) | ...
+| Narzędzie | URL | Dane logowania | Rola w projekcie |
+| :--- | :--- | :--- | :--- |
+| **Grafana** | `http://localhost:3000` lub `http://pi-user.local:3000/dashboards` | `admin` / `admin` | SIEM — wizualizacja ataków |
+| **Uptime Kuma** | `http://localhost:3001` lub `http://pi-user.local:3001` | (ustawiane przy 1. uruchomieniu) | NMS — monitoring usług |
+
+---
 
 ## Symulacja Ataku i Pentesting (Scenariusze)
 
@@ -83,12 +85,12 @@ Symulacja prób dostępu do usług FTP lub MySQL:
 
 ## 3. Struktura Projektu
 - `docker-compose.yml` — definicja kontenerów (Cowrie, Canary, Loki, Grafana, Kuma).
-- `logs/` — miejsce, gdzie Promtail "wyciąga" logi do wizualizacji.
-- `grafana/dashboards/` — gotowa konfiguracja Twojego panelu SIEM.
+- `logs/` — katalog przechowywania logów przetwarzanych przez Promtail.
+- `grafana/dashboards/` — konfiguracja panelu SIEM.
 - `cowrie/` & `opencanary/` — pliki konfiguracyjne symulowanych usług.
 
 ---
 
 ## Ważne Uwagi
-- **Honeypot Cowrie** działa na porcie **2222**. Nie pomyl go ze swoim prawdziwym SSH na Raspberry Pi (port 22)!
-- **Logi** są odświeżane w Grafanie co 5 sekund (można zmienić w prawym górnym rogu dashboardu).
+- **Honeypot Cowrie** działa na porcie **2222**. Należy unikać pomyłek z systemową usługą SSH działającą domyślnie na porcie 22.
+- **Odświeżanie logów** w Grafanie następuje co 5 sekund (parametr konfigurowalny w ustawieniach dashboardu).
