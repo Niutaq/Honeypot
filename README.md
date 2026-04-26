@@ -27,10 +27,57 @@ docker compose up -d
 ```
 
 ### 2. Dostęp do paneli WWW
-| Narzędzie | URL | Dane logowania | Rola w projekcie |
-| :--- | :--- | :--- | :--- |
+| Narzędzie | URL | Dane logowania
+| :--- | :--- | :--- |
 | **Grafana** | `http://localhost:3000` (lokalnie) lub `http://pi-user.local:3000/dashboards` (RPi) | `admin` / `admin` | SIEM — wizualizacja ataków |
-| **Uptime Kuma** | `http://localhost:3001` (lokalnie) lub `http://pi-user.local:3001` (RPi) | NMS — monitoring usług |
+| **Uptime Kuma** | `http://localhost:3001` (lokalnie) lub `http://pi-user.local:3001` (RPi) | ...
+
+## Symulacja Ataku i Pentesting (Scenariusze)
+
+Poniższe komendy pozwalają na przetestowanie systemu i wygenerowanie danych dla stosu SIEM (Grafana/Loki).
+
+### 1. Rekonesans (Nmap)
+Skanowanie usług wystawianych przez symulowany system IoT:
+```bash
+nmap -sV -p 21,80,161,2222,3306,5900,8080 localhost
+```
+Efekt: Wyświetlenie listy otwartych portów (SSH, FTP, HTTP, MySQL, VNC). Skanowanie zostaje odnotowane w logach Promtail/Loki.
+
+### 2. Atak Brute-Force SSH (Hydra)
+Wykorzystanie narzędzia Hydra do łamania haseł przy użyciu dołączonego słownika rockyou_small.txt:
+```bash
+hydra -l root -P rockyou_small.txt ssh://localhost:2222 -t 4
+```
+Efekt: Wzrost liczby nieudanych prób logowania w Grafanie oraz wypełnienie dashboardu najczęściej używanymi hasłami ze słownika.
+
+### 3. Skrypt symulacyjny
+Uruchomienie dołączonego skryptu Bash, który symuluje automatyczny atak brute-force:
+```bash
+chmod +x simulate_attack.sh
+./simulate_attack.sh localhost 2222
+```
+Efekt: Sekwencyjne testowanie kombinacji login:hasło i raportowanie statusu prób.
+
+### 4. Interaktywna sesja SSH
+Manualne zalogowanie do honeypota w celu wygenerowania zdarzenia typu "Krytyczne":
+```bash
+ssh root@localhost -p 2222
+# Hasło: dowolne (np. 123456)
+```
+Przykładowe polecenia do wykonania po uzyskaniu dostępu:
+```bash
+whoami
+cat /etc/passwd
+ls -la /tmp
+uname -a
+exit
+```
+Efekt: Aktualizacja panelu Udane Logowania w Grafanie oraz zapisanie pełnej historii wpisanych poleceń w sekcji Wykonywane Komendy.
+
+### 5. Testy innych usług (OpenCanary)
+Symulacja prób dostępu do usług FTP lub MySQL:
+- FTP: ftp localhost 21
+- MySQL: mysql -h localhost -P 3306 -u root -p
 
 ---
 
