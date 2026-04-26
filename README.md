@@ -83,7 +83,7 @@ Symulacja prób dostępu do usług FTP lub MySQL:
 
 ---
 
-## 3. Struktura Projektu
+## Struktura Projektu
 - `docker-compose.yml` — definicja kontenerów (Cowrie, Canary, Loki, Grafana, Kuma).
 - `logs/` — katalog przechowywania logów przetwarzanych przez Promtail.
 - `grafana/dashboards/` — konfiguracja panelu SIEM.
