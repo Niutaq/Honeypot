@@ -34,6 +34,22 @@ docker compose up -d
 
 ---
 
+## Konfiguracja Monitoringu (Uptime Kuma)
+W panelu Uptime Kuma (NMS) dodaj nowe monitory typu **TCP Port**, używając nazw kontenerów (Docker DNS):
+- **Honeypot SSH:** Hostname: `cowrie`, Port: `2222`
+- **Honeypot MySQL:** Hostname: `opencanary`, Port: `3306`
+- **Loki (SIEM):** Hostname: `loki`, Port: `3100`
+
+---
+
+## Dostęp Zdalny (SSH poza domem)
+Aby bezpiecznie łączyć się z Raspberry Pi z dowolnego miejsca bez przekierowywania portów, zainstaluj **Tailscale**:
+1. Na Raspberry Pi: `curl -fsSL https://tailscale.com/install.sh | sh`
+2. Zaloguj się: `sudo tailscale up`
+3. Zainstaluj Tailscale na swoim laptopie i używaj adresu IP z panelu Tailscale w swoim aliasie `ssh pi`.
+
+---
+
 ## Symulacja Ataku i Pentesting (Scenariusze)
 
 Poniższe komendy pozwalają na przetestowanie systemu i wygenerowanie danych dla stosu SIEM (Grafana/Loki).
