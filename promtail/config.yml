@@ -16,6 +16,18 @@ scrape_configs:
         labels:
           job: cowrie
           __path__: /var/log/cowrie/cowrie.json*
+    pipeline_stages:
+      - json:
+          expressions:
+            eventid: eventid
+            src_ip: src_ip
+            username: username
+            password: password
+            input: input
+      - labels:
+          eventid:
+          src_ip:
+          username:
 
   - job_name: opencanary
     static_configs:
@@ -24,3 +36,11 @@ scrape_configs:
         labels:
           job: opencanary
           __path__: /var/log/opencanary/opencanary.log*
+    pipeline_stages:
+      - json:
+          expressions:
+            logtype: logtype
+            src_host: src_host
+      - labels:
+          logtype:
+          src_host:
