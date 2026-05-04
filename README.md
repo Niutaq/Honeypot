@@ -39,10 +39,12 @@ docker compose up -d
 docker compose ps
 ```
 
+# pi-user - lokalny użytownik
+
 Panel Grafana:
 
 ```text
-http://localhost:3000
+http://pi-user.local:3000/login
 login: admin
 hasło: admin
 ```
@@ -50,7 +52,7 @@ hasło: admin
 Panel Uptime Kuma:
 
 ```text
-http://localhost:3001
+http://pi-user.local:3001
 ```
 
 ## Demo: atakowanie z zewnątrz
@@ -127,6 +129,8 @@ Możesz też uruchomić skrypt idempotentny:
 
 ## 3. Administrator - laptop połączony z RPi
 
+Projekt powinien działać na Raspberry Pi. Laptop administratora służy tylko do SSH, tunelu i przeglądarki. Nie uruchamiaj drugiego `docker compose up -d` na laptopie, bo wtedy `http://localhost:3000` może wskazywać lokalną Grafanę z laptopa, a nie Grafanę z RPi.
+
 Połącz się z RPi:
 
 ```bash
@@ -139,10 +143,22 @@ Opcjonalny tunel do Grafany:
 ssh -L 3000:localhost:3000 pi@<TAILSCALE_IP_RPI>
 ```
 
-Na laptopie otwórz:
+Trzymaj ten terminal otwarty. Dopiero wtedy na laptopie otwórz:
 
 ```text
 http://localhost:3000
+```
+
+Jeżeli port `3000` jest zajęty na laptopie, użyj innego portu lokalnego:
+
+```bash
+ssh -L 3005:localhost:3000 pi@<TAILSCALE_IP_RPI>
+```
+
+Wtedy na laptopie otwórz:
+
+```text
+http://localhost:3005
 ```
 
 W Grafanie wybierz dashboard:
@@ -232,8 +248,9 @@ Polecana komenda dla publicznego URL Tailscale HTTPS:
 
 ```bash
 hydra -I -l admin -P rockyou_small.txt \
+  -s 443 \
   pi-user.tail8a7b69.ts.net https-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 443
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 Znaczenie:
@@ -251,8 +268,9 @@ Dla HTTP bez TLS:
 
 ```bash
 hydra -I -l admin -P rockyou_small.txt \
+  -s 80 \
   <HOST_LUB_IP> http-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 80
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 ## 7. Atakujący - SSH Cowrie
@@ -262,7 +280,7 @@ Tailscale Serve wystawia głównie WWW. SSH Cowrie na porcie `2222` musi być os
 Lokalnie/LAN:
 
 ```bash
-hydra -I -l admin -P rockyou_small.txt ssh://<IP_RPI> -s 2222 -t 4
+hydra -I -l admin -P rockyou_small.txt -s 2222 -t 4 ssh://<IP_RPI>
 ```
 
 Test ręczny:
@@ -325,8 +343,9 @@ http://localhost:3000
 curl -k https://pi-user.tail8a7b69.ts.net/.env
 curl -k https://pi-user.tail8a7b69.ts.net/wp-login.php
 hydra -I -l admin -P rockyou_small.txt \
+  -s 443 \
   pi-user.tail8a7b69.ts.net https-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 443
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 6. Administrator pokazuje w Grafanie:
@@ -502,6 +521,8 @@ docker compose up -d
 docker compose ps
 ```
 
+# pi-user - local user
+
 Local web check:
 
 ```bash
@@ -536,6 +557,8 @@ You can also run:
 
 ## 3. Admin
 
+The stack should run on the Raspberry Pi. The admin laptop is only used for SSH, tunneling, and the browser. Do not run a second `docker compose up -d` on the laptop unless you intentionally want a separate local test stack.
+
 SSH to the RPi:
 
 ```bash
@@ -548,10 +571,22 @@ Optional Grafana tunnel:
 ssh -L 3000:localhost:3000 pi@<TAILSCALE_IP_RPI>
 ```
 
-Open on the laptop:
+Keep this terminal open. Then open on the laptop:
 
 ```text
 http://localhost:3000
+```
+
+If local port `3000` is already used on the laptop:
+
+```bash
+ssh -L 3005:localhost:3000 pi@<TAILSCALE_IP_RPI>
+```
+
+Then open:
+
+```text
+http://localhost:3005
 ```
 
 Use:
@@ -625,8 +660,9 @@ Recommended command for the public Tailscale HTTPS URL:
 
 ```bash
 hydra -I -l admin -P rockyou_small.txt \
+  -s 443 \
   pi-user.tail8a7b69.ts.net https-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 443
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 Meaning:
@@ -644,8 +680,9 @@ For plain HTTP:
 
 ```bash
 hydra -I -l admin -P rockyou_small.txt \
+  -s 80 \
   <HOST_OR_IP> http-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 80
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 ## 7. SSH Cowrie attack
@@ -653,7 +690,7 @@ hydra -I -l admin -P rockyou_small.txt \
 Tailscale Serve exposes the web page. Cowrie on `2222` must be reachable separately, for example through LAN, Tailscale IP, port forwarding, or a TCP tunnel.
 
 ```bash
-hydra -I -l admin -P rockyou_small.txt ssh://<RPI_IP> -s 2222 -t 4
+hydra -I -l admin -P rockyou_small.txt -s 2222 -t 4 ssh://<RPI_IP>
 ```
 
 Manual test:
@@ -700,8 +737,9 @@ tailscale serve status
 curl -k https://pi-user.tail8a7b69.ts.net/.env
 curl -k https://pi-user.tail8a7b69.ts.net/wp-login.php
 hydra -I -l admin -P rockyou_small.txt \
+  -s 443 \
   pi-user.tail8a7b69.ts.net https-post-form \
-  "/login:username=^USER^&password=^PASS^:Invalid" -s 443
+  "/login:username=^USER^&password=^PASS^:Invalid"
 ```
 
 6. The admin shows Grafana panels with paths, login attempts, user-agents, timeline, and raw logs.
