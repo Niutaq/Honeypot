@@ -35,6 +35,7 @@ scrape_configs:
           - localhost
         labels:
           job: opencanary
+          service: core
           __path__: /var/log/opencanary/opencanary.log*
     pipeline_stages:
       - json:
@@ -44,3 +45,33 @@ scrape_configs:
       - labels:
           logtype:
           src_host:
+      - match:
+          selector: '{job="opencanary", service="core", logtype=~"3000|3001"}'
+          action: drop
+
+  - job_name: opencanary-http
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: opencanary
+          service: http
+          __path__: /var/log/opencanary/opencanary.log*
+    pipeline_stages:
+      - json:
+          expressions:
+            src_host: src_host
+            logtype: logtype
+            username: logdata.USERNAME
+            password: logdata.PASSWORD
+            hostname: logdata.HOSTNAME
+            path: logdata.PATH
+            user_agent: logdata.USERAGENT
+      - labels:
+          src_host:
+          logtype:
+          path:
+          user_agent:
+      - match:
+          selector: '{job="opencanary", service="http", logtype!~"3000|3001"}'
+          action: drop

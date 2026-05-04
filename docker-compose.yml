@@ -1,5 +1,11 @@
+x-json-logging: &json-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+
 networks:
-  honeypot-net:
+  honeypot_net:
+    name: honeypot_net
     driver: bridge
     ipam:
       config:
@@ -17,6 +23,7 @@ services:
     image: cowrie/cowrie:latest
     container_name: cowrie
     restart: unless-stopped
+    logging: *json-logging
     ports:
       - "2222:2222" # SSH
       - "2223:2223" # Telnet
@@ -27,7 +34,7 @@ services:
     environment:
       - COWRIE_TELNET_ENABLED=yes
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.10
 
   # ─────────────────────────────────────────
@@ -37,20 +44,39 @@ services:
     image: thinkst/opencanary:latest
     container_name: opencanary
     restart: unless-stopped
+    logging: *json-logging
     ports:
       - "21:21" # FTP
-      - "80:80" # HTTP
       - "3306:3306" # MySQL
       - "5900:5900" # VNC
-      - "8082:8080" # HTTP alt
+      - "8082:8080" # OpenCanary HTTP alt for LAN testing
     volumes:
       - ./logs/opencanary:/var/log/opencanary
       - ./opencanary/opencanary.conf:/etc/opencanaryd/opencanary.conf:ro
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.11
     cap_add:
       - NET_BIND_SERVICE
+
+  # ─────────────────────────────────────────
+  # DECOY WEB — Public fake login portal
+  # ─────────────────────────────────────────
+  decoy-web:
+    image: nginx:alpine
+    container_name: decoy-web
+    restart: unless-stopped
+    logging: *json-logging
+    ports:
+      - "80:80"
+    volumes:
+      - ./decoy-web/index.html:/usr/share/nginx/html/index.html:ro
+      - ./decoy-web/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - opencanary
+    networks:
+      honeypot_net:
+        ipv4_address: 172.22.0.12
 
   # ─────────────────────────────────────────
   # LOKI — SIEM & Log Aggregation
@@ -59,11 +85,12 @@ services:
     image: grafana/loki:3.0.0
     container_name: loki
     restart: unless-stopped
+    logging: *json-logging
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.20
 
   # ─────────────────────────────────────────
@@ -73,6 +100,7 @@ services:
     image: grafana/promtail:3.0.0
     container_name: promtail
     restart: unless-stopped
+    logging: *json-logging
     user: root
     volumes:
       - ./logs/cowrie:/var/log/cowrie:ro
@@ -82,7 +110,7 @@ services:
     depends_on:
       - loki
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.21
 
   # ─────────────────────────────────────────
@@ -92,6 +120,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
+    logging: *json-logging
     ports:
       - "3000:3000"
     environment:
@@ -103,7 +132,7 @@ services:
     depends_on:
       - loki
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.22
 
   # ─────────────────────────────────────────
@@ -113,10 +142,33 @@ services:
     image: louislam/uptime-kuma:1
     container_name: uptime-kuma
     restart: unless-stopped
+    logging: *json-logging
     ports:
       - "3001:3001"
     volumes:
       - uptime-kuma-data:/app/data
     networks:
-      honeypot-net:
+      honeypot_net:
         ipv4_address: 172.22.0.30
+
+  # ─────────────────────────────────────────
+  # NGROK — Optional public tunnel fallback
+  # ─────────────────────────────────────────
+  ngrok:
+    image: ngrok/ngrok:alpine
+    container_name: ngrok
+    restart: unless-stopped
+    logging: *json-logging
+    profiles:
+      - ngrok
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-}
+    command:
+      - http
+      - decoy-web:80
+      - --authtoken=${NGROK_AUTHTOKEN:-}
+    depends_on:
+      - decoy-web
+    networks:
+      honeypot_net:
+        ipv4_address: 172.22.0.40

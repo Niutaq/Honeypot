@@ -5,5 +5,8 @@
 logs/
 *.log
 
+# Local secrets
+.env
+
 # Misc
 .zed/
