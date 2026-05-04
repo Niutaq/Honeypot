@@ -70,8 +70,41 @@ scrape_configs:
       - labels:
           src_host:
           logtype:
+          username:
+          password:
           path:
           user_agent:
       - match:
           selector: '{job="opencanary", service="http", logtype!~"3000|3001"}'
           action: drop
+
+  - job_name: decoy-web-http
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: decoy-web
+          service: http
+          __path__: /var/log/nginx/access.log*
+    pipeline_stages:
+      - json:
+          expressions:
+            src_ip: remote_addr
+            forwarded_for: x_forwarded_for
+            method: method
+            path: path
+            status: status
+            user_agent: user_agent
+            post_data: post_data
+      - regex:
+          source: post_data
+          expression: '(?:^|&)username=(?P<username>[^&]*)&password=(?P<password>[^&]*)'
+      - labels:
+          src_ip:
+          forwarded_for:
+          method:
+          path:
+          status:
+          user_agent:
+          username:
+          password:

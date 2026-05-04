@@ -19,7 +19,7 @@ TAILSCALE_FILE="$PROJECT_DIR/Tailscale_adres.txt"
 cd "$PROJECT_DIR"
 
 log "Tworzę wymagane katalogi, jeśli ich brakuje."
-mkdir -p cowrie opencanary promtail grafana/dashboards decoy-web logs/cowrie logs/opencanary
+mkdir -p cowrie opencanary promtail grafana/dashboards decoy-web logs/cowrie logs/opencanary logs/nginx
 touch "$TAILSCALE_FILE"
 
 if ! command -v docker >/dev/null 2>&1; then

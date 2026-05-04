@@ -1,22 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Northbridge University Identity Portal</title>
+  <title>Materiały dla studentów - demonstrator</title>
   <style>
     :root {
-      color-scheme: light;
-      --ink: #172033;
-      --muted: #627084;
-      --line: #d8dee8;
-      --field: #f8fafc;
-      --brand: #0d5c63;
-      --brand-dark: #083d42;
-      --accent: #b17b24;
-      --danger: #a63d2c;
-      --page: #eef2f6;
-      --panel: #ffffff;
+      --teal: #4fa3a6;
+      --teal-dark: #397f83;
+      --blue: #1d6fab;
+      --navy: #111044;
+      --text: #202020;
+      --muted: #707070;
+      --line: #d8d8d8;
+      --page: #ffffff;
+      --footer: #efefef;
     }
 
     * {
@@ -26,308 +24,459 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-      background:
-        linear-gradient(135deg, rgba(13, 92, 99, 0.08), rgba(177, 123, 36, 0.08)),
-        var(--page);
-      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      font-size: 14px;
     }
 
-    .topbar {
+    .utility {
+      height: 31px;
+      background: #ececec;
+      border-bottom: 1px solid #d5d5d5;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .utility-inner {
+      width: 1090px;
+      max-width: calc(100% - 32px);
+      margin: 0 auto;
+      height: 31px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 64px;
-      padding: 0 32px;
-      background: var(--brand-dark);
-      color: #fff;
-      border-bottom: 4px solid var(--accent);
     }
 
-    .brand {
+    .tools,
+    .search {
       display: flex;
       align-items: center;
-      gap: 14px;
-      font-weight: 700;
-      letter-spacing: 0;
+      gap: 22px;
+      white-space: nowrap;
     }
 
-    .seal {
+    .tool-icon {
+      line-height: 1;
+    }
+
+    .masthead {
+      background: var(--teal);
+      min-height: 104px;
+    }
+
+    .masthead-inner {
+      width: 1090px;
+      max-width: calc(100% - 32px);
+      margin: 0 auto;
+      display: flex;
+      align-items: end;
+      gap: 74px;
+      min-height: 104px;
+      padding: 10px 0 18px;
+    }
+
+    .logo {
+      width: 95px;
+      height: 95px;
       display: grid;
       place-items: center;
-      width: 38px;
-      height: 38px;
-      border: 2px solid rgba(255,255,255,0.72);
       border-radius: 50%;
+      border: 4px solid #1d6f8a;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,0.92), rgba(255,255,255,0.16) 37%, rgba(23,93,126,0.85) 70%),
+        #5fb3bd;
+      color: #071835;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 36px;
+      font-weight: 900;
+      text-shadow: 1px 2px 0 rgba(255,255,255,0.75);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.45) inset;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 4px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .main-nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: 1090px;
+      max-width: calc(100% - 32px);
+      margin: 0 auto;
+    }
+
+    .breadcrumbs {
+      padding: 13px 0 12px;
+      color: #747474;
+      font-size: 12px;
+      border-bottom: 1px dotted #e0e0e0;
+    }
+
+    .breadcrumbs a {
+      color: #747474;
+      text-decoration: underline;
+      margin-right: 8px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 315px minmax(0, 1fr);
+      gap: 24px;
+      padding: 13px 0 30px;
+    }
+
+    .side-menu {
+      border: 1px solid var(--line);
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .side-menu a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 40px;
+      padding: 0 15px;
+      border-bottom: 1px solid var(--line);
+      color: var(--teal-dark);
+      text-decoration: none;
+      font-weight: 900;
+      text-transform: uppercase;
       font-size: 14px;
     }
 
-    .system-name {
-      font-size: 17px;
-      line-height: 1.2;
+    .side-menu a:last-child {
+      border-bottom: 0;
     }
 
-    .status {
-      font-size: 13px;
-      color: rgba(255,255,255,0.82);
+    .anniversary {
+      width: 255px;
+      margin: 22px auto 0;
+      color: var(--teal-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.05;
     }
 
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 420px;
-      gap: 36px;
-      width: min(1080px, calc(100% - 40px));
-      margin: 48px auto;
-      align-items: start;
+    .anniversary .sixty {
+      font-size: 78px;
+      font-weight: 300;
+      letter-spacing: -7px;
     }
 
-    .notice {
-      padding-top: 18px;
+    .anniversary .copy {
+      font-size: 16px;
+    }
+
+    .anniversary small {
+      display: block;
+      color: #2b8a8f;
+      font-size: 10px;
+      margin-top: 3px;
     }
 
     h1 {
-      margin: 0 0 18px;
-      font-size: 34px;
+      margin: 0 0 19px;
+      font-size: 28px;
       line-height: 1.15;
       letter-spacing: 0;
-      color: var(--brand-dark);
+      font-weight: 900;
     }
 
-    .lead {
-      max-width: 620px;
-      margin: 0 0 28px;
-      font-size: 17px;
-      line-height: 1.65;
-      color: var(--muted);
-    }
-
-    .service-list {
+    .share {
+      min-height: 545px;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      max-width: 640px;
-    }
-
-    .service {
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.72);
-      padding: 14px 16px;
-    }
-
-    .service strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
-      color: var(--ink);
-    }
-
-    .service span {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .login-panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: 0 18px 50px rgba(23, 32, 51, 0.13);
+      place-items: center;
+      position: relative;
       overflow: hidden;
+      background:
+        linear-gradient(rgba(134, 196, 220, 0.28), rgba(255, 255, 255, 0.06)),
+        linear-gradient(170deg, #8ccbe7 0%, #c9e3ee 28%, #f4dac3 55%, #f5efe2 100%);
     }
 
-    .login-header {
-      padding: 24px 26px 18px;
-      border-bottom: 1px solid var(--line);
+    .share::before,
+    .share::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.74);
+      filter: blur(1px);
     }
 
-    .login-header h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-      letter-spacing: 0;
-      color: var(--ink);
+    .share::before {
+      width: 360px;
+      height: 120px;
+      right: -70px;
+      bottom: 86px;
+      box-shadow: -120px 8px 0 12px rgba(255,255,255,0.48);
     }
 
-    .login-header p {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--muted);
+    .share::after {
+      width: 500px;
+      height: 96px;
+      left: -90px;
+      bottom: 40px;
+      box-shadow: 190px 12px 0 6px rgba(255,255,255,0.45);
     }
 
-    form {
-      padding: 24px 26px 26px;
+    .login-box {
+      position: relative;
+      z-index: 1;
+      width: 280px;
+      color: #fff;
+      text-align: left;
+      transform: translateY(-10px);
+    }
+
+    .login-logo {
+      width: 108px;
+      height: 108px;
+      margin: 0 auto 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 4px solid #15738f;
+      background:
+        radial-gradient(circle at 35% 22%, rgba(255,255,255,0.9), rgba(255,255,255,0.18) 40%, rgba(30,88,122,0.86) 72%),
+        #5eb6c3;
+      color: #071835;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 38px;
+      font-weight: 900;
+      text-shadow: 1px 2px 0 rgba(255,255,255,0.78);
+    }
+
+    .share-note {
+      margin: 0 0 17px;
+      text-align: center;
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink);
+      margin: 0 0 7px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
     }
 
     input {
       width: 100%;
-      height: 44px;
-      margin-bottom: 18px;
-      padding: 0 12px;
-      border: 1px solid #b8c1cc;
-      border-radius: 5px;
-      background: var(--field);
-      color: var(--ink);
-      font: inherit;
+      height: 41px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.94);
+      color: #222;
+      font-size: 16px;
     }
 
     input:focus {
-      outline: 3px solid rgba(13, 92, 99, 0.18);
-      border-color: var(--brand);
-      background: #fff;
-    }
-
-    .form-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 2px 0 20px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .form-row a {
-      color: var(--brand);
-      text-decoration: none;
-      font-weight: 700;
+      outline: 3px solid rgba(17, 16, 68, 0.25);
     }
 
     button {
       width: 100%;
-      height: 46px;
+      height: 42px;
+      margin-top: 29px;
       border: 0;
-      border-radius: 5px;
-      background: var(--brand);
+      border-radius: 2px;
+      background: var(--navy);
       color: #fff;
-      font: inherit;
-      font-weight: 700;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: 900;
     }
 
-    button:hover {
-      background: var(--brand-dark);
-    }
-
-    .alert {
-      margin-top: 18px;
-      padding: 12px 14px;
-      border-left: 4px solid var(--danger);
-      background: #fff5f2;
-      color: #6f2f24;
-      font-size: 13px;
+    .copyright {
+      position: absolute;
+      z-index: 1;
+      bottom: 22px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      font-size: 12px;
+      font-weight: 700;
       line-height: 1.45;
     }
 
-    footer {
-      width: min(1080px, calc(100% - 40px));
-      margin: 0 auto 32px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
+    .bar {
+      height: 37px;
+      background: var(--teal);
     }
 
-    @media (max-width: 820px) {
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 6px;
-        padding: 14px 20px;
+    footer {
+      background: var(--footer);
+      min-height: 100px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .footer-inner {
+      width: 1090px;
+      max-width: calc(100% - 32px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 80px;
+      gap: 28px;
+      padding: 20px 0;
+    }
+
+    .footer-links {
+      line-height: 1.45;
+    }
+
+    .demo-note {
+      color: #888;
+      font-weight: 400;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 850px) {
+      .masthead-inner {
+        align-items: center;
+        gap: 20px;
       }
 
-      main {
+      .main-nav {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .content {
         grid-template-columns: 1fr;
-        margin-top: 28px;
       }
 
-      .service-list {
+      .side {
+        display: none;
+      }
+
+      .share {
+        min-height: 500px;
+      }
+
+      .footer-inner {
         grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 28px;
       }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="seal">NU</div>
-      <div class="system-name">Northbridge University<br>Identity Portal</div>
+  <div class="utility">
+    <div class="utility-inner">
+      <div class="tools">
+        <span class="tool-icon">⌂</span>
+        <span class="tool-icon">⌃</span>
+        <span class="tool-icon">◐</span>
+        <span>A</span>
+        <span>A<sup>+</sup></span>
+        <span>A<sup>++</sup></span>
+      </div>
+      <div class="search">🔍 Wyszukaj⌄</div>
     </div>
-    <div class="status">Production SSO Cluster · node nb-idp-03</div>
+  </div>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="logo">PEI</div>
+      <nav class="main-nav" aria-label="Menu główne">
+        <a href="/">Aktualności</a>
+        <a href="/dydaktyka-g/materialy-dla-studentow">Dydaktyka</a>
+        <a href="/terminy-konsultacji">Terminy konsultacji</a>
+        <a href="/kontakt">Kontakt</a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section class="notice" aria-label="Service notice">
-      <h1>Secure access for staff, faculty, and student services</h1>
-      <p class="lead">
-        Use your university account to access email, course systems, payroll,
-        library resources, and internal administrative tools.
-      </p>
+  <div class="wrap">
+    <div class="breadcrumbs">
+      <a href="/">Strona główna</a> ›
+      <a href="/dydaktyka">Dydaktyka</a> ›
+      <strong>Materiały dla studentów</strong>
+    </div>
 
-      <div class="service-list">
-        <div class="service">
-          <strong>Student Records</strong>
-          <span>Registration, grades, transcripts</span>
+    <main class="content">
+      <aside class="side">
+        <nav class="side-menu" aria-label="Menu boczne">
+          <a href="/">Aktualności</a>
+          <a href="/badania">Badania naukowe <span>⌄</span></a>
+          <a href="/dydaktyka">Dydaktyka <span>⌄</span></a>
+          <a href="/terminy">Terminy konsultacji <span>⌄</span></a>
+          <a href="/kontakt">Kontakt</a>
+        </nav>
+
+        <div class="anniversary">
+          <div class="sixty">60</div>
+          <div class="copy">
+            lat wydziału<br>
+            elektrotechniki<br>
+            i informatyki
+            <small>Politechniki Rzeszowskiej</small>
+          </div>
         </div>
-        <div class="service">
-          <strong>Finance Office</strong>
-          <span>Invoices, payroll, reimbursements</span>
+      </aside>
+
+      <section>
+        <h1>Materiały dla studentów</h1>
+        <div class="share">
+          <form class="login-box" method="post" action="/login" autocomplete="off">
+            <div class="login-logo">PEI</div>
+            <p class="share-note">This share is password-protected</p>
+
+            <input type="hidden" name="username" value="admin">
+            <input type="hidden" name="resource" value="materialy-dla-studentow">
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Password" required autofocus>
+
+            <button type="submit">Proceed</button>
+          </form>
+
+          <div class="copyright">
+            © 2026 Katedra Elektrotechniki i Informatyki<br>
+            To miejsce plików.
+          </div>
         </div>
-        <div class="service">
-          <strong>Research VPN</strong>
-          <span>Lab resources and remote access</span>
-        </div>
-        <div class="service">
-          <strong>IT Service Desk</strong>
-          <span>Account recovery and device enrollment</span>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
+  </div>
 
-    <section class="login-panel" aria-label="Login form">
-      <div class="login-header">
-        <h2>Sign in</h2>
-        <p>Enter your NetID credentials to continue to the requested service.</p>
-      </div>
-
-      <form method="post" action="/login" autocomplete="off">
-        <input type="hidden" name="realm" value="northbridge.edu">
-        <input type="hidden" name="service" value="portal">
-
-        <label for="username">NetID or email</label>
-        <input id="username" name="username" type="text" inputmode="email" required autofocus>
-
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required>
-
-        <div class="form-row">
-          <span>Session expires after 20 minutes</span>
-          <a href="/account/recovery">Forgot password?</a>
-        </div>
-
-        <button type="submit">Sign in</button>
-
-        <div class="alert">
-          Maintenance window: identity services may require re-authentication
-          after scheduled updates.
-        </div>
-      </form>
-    </section>
-  </main>
+  <div class="bar"></div>
 
   <footer>
-    Authorized use only. Activity may be monitored and recorded for security,
-    audit, and compliance purposes.
+    <div class="footer-inner">
+      <div>
+        Katedra Elektrotechniki i Podstaw Informatyki<br>
+        ul. Wincentego Pola 2<br>
+        35-959 Rzeszów
+        <div class="demo-note">Kontrolowany demonstrator honeypot do zajęć z cyberbezpieczeństwa.</div>
+      </div>
+      <div class="footer-links">
+        Mapa serwisu<br>
+        Deklaracja dostępności<br>
+        Polityka prywatności<br>
+        Zgłoś błąd na stronie
+      </div>
+      <div>BIP</div>
+    </div>
   </footer>
 </body>
 </html>
