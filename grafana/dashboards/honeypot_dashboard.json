@@ -105,9 +105,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -172,9 +170,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -235,9 +231,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -488,10 +482,7 @@
       },
       "id": 6,
       "options": {
-        "displayLabels": [
-          "name",
-          "percent"
-        ],
+        "displayLabels": ["name", "percent"],
         "legend": {
           "displayMode": "table",
           "placement": "right",
@@ -499,9 +490,7 @@
         },
         "pieType": "donut",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -539,10 +528,10 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by (password) (count_over_time({job=\"decoy-web\", service=\"http\", method=\"POST\", path=\"/login\", password=~\".+\"}[$__range])))",
+          "expr": "topk(10, sum by (password) (count_over_time({job=\"decoy-web\", service=\"http\"} | json | method=\"POST\" | path=\"/login\" | password!=\"\" [$__range])))",
           "queryType": "instant",
           "refId": "C",
-          "legendFormat": "Web has\u0142o: {{password}}"
+          "legendFormat": "Web hasło: {{password}}"
         },
         {
           "datasource": {
@@ -550,7 +539,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by (username) (count_over_time({job=\"decoy-web\", service=\"http\", method=\"POST\", path=\"/login\", username=~\".+\"}[$__range])))",
+          "expr": "topk(10, sum by (username) (count_over_time({job=\"decoy-web\", service=\"http\"} | json | method=\"POST\" | path=\"/login\" | username!=\"\" [$__range])))",
           "queryType": "instant",
           "refId": "D",
           "legendFormat": "Web login: {{username}}"
@@ -590,9 +579,7 @@
       },
       "id": 7,
       "options": {
-        "displayLabels": [
-          "name"
-        ],
+        "displayLabels": ["name"],
         "legend": {
           "displayMode": "table",
           "placement": "right",
@@ -600,9 +587,7 @@
         },
         "pieType": "pie",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -699,10 +684,7 @@
       },
       "id": 9,
       "options": {
-        "displayLabels": [
-          "name",
-          "percent"
-        ],
+        "displayLabels": ["name", "percent"],
         "legend": {
           "displayMode": "table",
           "placement": "right",
@@ -710,9 +692,7 @@
         },
         "pieType": "donut",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -915,9 +895,7 @@
         "footer": {
           "countRows": false,
           "fields": "",
-          "reducer": [
-            "sum"
-          ],
+          "reducer": ["sum"],
           "show": false
         },
         "showHeader": true
@@ -988,9 +966,7 @@
         "footer": {
           "countRows": false,
           "fields": "",
-          "reducer": [
-            "sum"
-          ],
+          "reducer": ["sum"],
           "show": false
         },
         "showHeader": true
@@ -1145,10 +1121,7 @@
   ],
   "refresh": "5s",
   "schemaVersion": 39,
-  "tags": [
-    "honeypot",
-    "iot"
-  ],
+  "tags": ["honeypot", "iot"],
   "templating": {
     "list": []
   },
