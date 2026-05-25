@@ -7,6 +7,11 @@ logs/
 
 # Local secrets
 .env
+Tailscale_adres.txt
+raspberry_pi_dane.txt
+prezentacja.md
 
 # Misc
 .zed/
+*.restore
+*.png
