@@ -8,7 +8,7 @@
 
 ### Spis treści / Table of Contents
 
-*   [Język Polski](#język-polski)
+*   [Wersja polska](#wersja-polska)
     *   [Architektura](#architektura)
     *   [Szybki Start](#szybki-start)
     *   [Scenariusze Ataków](#scenariusze-ataków)
@@ -24,7 +24,7 @@
 
 ---
 
-## Język Polski
+## Wersja polska
 
 
 Projekt demonstracyjny honeypota uruchamianego na Raspberry Pi. Stack zbiera i wizualizuje ataki na usługi SSH/Telnet, FTP, HTTP, MySQL, VNC oraz na fałszywą stronę WWW wystawioną publicznie przez Tailscale Serve/Funnel.
