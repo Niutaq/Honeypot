@@ -4,10 +4,28 @@
 
 [![Project Status](https://img.shields.io/badge/status-demonstration-blue.svg)](https://github.com/niutaq/honeypot)
 
+---
+
+### Spis treści / Table of Contents
+
+*   [Język Polski](#język-polski)
+    *   [Architektura](#architektura)
+    *   [Szybki Start](#szybki-start)
+    *   [Scenariusze Ataków](#scenariusze-ataków)
+    *   [Monitoring i Analiza](#monitoring-i-analiza)
+    *   [Rozwiązywanie problemów](#rozwiązywanie-problemów)
+*   [English Version](#english-version)
+    *   [Architecture](#architecture)
+    *   [Quick Start](#quick-start)
+    *   [Attack Scenarios](#attack-scenarios)
+    *   [Monitoring and Analysis](#monitoring-and-analysis-1)
+    *   [Troubleshooting](#troubleshooting)
+*   [Nota Prawna / Legal Notice](#nota-prawna--legal-notice)
 
 ---
 
-## Wersja polska
+## Język Polski
+
 
 Projekt demonstracyjny honeypota uruchamianego na Raspberry Pi. Stack zbiera i wizualizuje ataki na usługi SSH/Telnet, FTP, HTTP, MySQL, VNC oraz na fałszywą stronę WWW wystawioną publicznie przez Tailscale Serve/Funnel.
 
