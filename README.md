@@ -1,6 +1,9 @@
 # IoT Honeypot Stack - Raspberry Pi
 
-[![Project Status](https://img.shields.io/badge/status-demonstration-red.svg)](https://github.com/niutaq/honeypot)
+![Project Preview](RPi_first_look.png)
+
+[![Project Status](https://img.shields.io/badge/status-demonstration-blue.svg)](https://github.com/niutaq/honeypot)
+
 
 ---
 
