@@ -34,8 +34,16 @@ Services:
 | uptime-kuma | Service monitoring | 3001 |
 | ngrok | Public tunnel fallback | ngrok profile |
 
-Web flow:
-Attacker -> public Tailscale URL -> RPi:80 -> decoy-web/NGINX -> /login proxied to OpenCanary:8080 -> NGINX JSON log in logs/nginx/access.log -> OpenCanary log in logs/opencanary/opencanary.log -> Promtail -> Loki -> Grafana
+### Web & Ingestion Flow
+
+1. **Inbound Traffic:**  
+   `Attacker` ➔ `Tailscale Funnel (Public URL)` ➔ `RPi:80 (decoy-web / NGINX)`
+2. **Honeypot Trap:**  
+   `decoy-web` ➔ Proxies `/login` requests ➔ `OpenCanary:8080`
+3. **Log Aggregation Pipeline:**  
+   * `NGINX JSON Log` (`logs/nginx/access.log`)  
+   * `OpenCanary Log` (`logs/opencanary/opencanary.log`)  
+   └──► **`Promtail`** ➔ **`Loki`** ➔ **`Grafana SIEM Dashboard`**
 
 ### Quick Start
 
@@ -90,5 +98,4 @@ If Grafana shows "No data":
 
 ## Legal Notice
 
-Projekt wyłącznie do celów edukacyjnych. Nie używaj go do monitorowania prawdziwych systemów bez odpowiedniej autoryzacji.
 For educational purposes only. Do not use for monitoring real systems without authorization.
