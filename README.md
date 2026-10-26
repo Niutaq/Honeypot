@@ -25,6 +25,7 @@ A self-contained honeypot stack that turns a Raspberry Pi into a multi-service t
 - [Roadmap](#roadmap)
 - [Security & Contributing](#security--contributing)
 - [License](#license)
+- [Demo](#demo)
 
 ---
 
@@ -193,6 +194,18 @@ The repo includes ready-to-run scripts for generating realistic telemetry during
 ## License
 
 Educational demonstration project. See repository for terms.
+
+---
+
+## Demo
+
+<div align="center">
+
+![Project Preview](RPi_first_look.png)
+
+*Live attack feed and SIEM telemetry visualized in Grafana.*
+
+</div>
 
 ---
 
