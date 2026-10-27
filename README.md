@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍯 Honeypot
+# Honeypot
 
 **IoT Security Lab on a Raspberry Pi**
 
